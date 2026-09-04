@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="text-2xl font-bold text-slate-900 mb-6">Admin / System Layer Control Panel</h1>
+
+<!-- System Reports Section -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white p-4 rounded-xl border shadow-sm border-l-4 border-l-indigo-600">
+        <p class="text-xs text-slate-500 font-bold uppercase">Total Registered Users</p>
+        <p class="text-2xl font-black text-slate-800">{{ reports.total_users }}</p>
+    </div>
+    <div class="bg-white p-4 rounded-xl border shadow-sm border-l-4 border-l-emerald-600">
+        <p class="text-xs text-slate-500 font-bold uppercase">Approved Jobs</p>
+        <p class="text-2xl font-black text-slate-800">{{ reports.total_jobs }}</p>
+    </div>
+    <div class="bg-white p-4 rounded-xl border shadow-sm border-l-4 border-l-amber-500">
+        <p class="text-xs text-slate-500 font-bold uppercase">Total Applications</p>
+        <p class="text-2xl font-black text-slate-800">{{ reports.total_applications }}</p>
+    </div>
+    <div class="bg-white p-4 rounded-xl border shadow-sm border-l-4 border-l-purple-600">
+        <p class="text-xs text-slate-500 font-bold uppercase">Total Hired</p>
+        <p class="text-2xl font-black text-slate-800">{{ reports.total_hired }}</p>
+    </div>
+</div>
+
+<!-- Manage Users Section -->
+<h2 class="text-lg font-bold text-slate-800 mb-3">Manage Users (Verify / Suspend)</h2>
+<div class="bg-white rounded-xl border shadow-sm overflow-hidden mb-8">
+    <table class="w-full text-left text-xs">
+        <thead class="bg-slate-100 font-bold">
+            <tr>
+                <th class="p-3">Name</th>
+                <th class="p-3">Email</th>
+                <th class="p-3">Role</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Action</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y">
+            {% for u in users %}
+            <tr>
+                <td class="p-3 font-bold">{{ u.first_name }} {{ u.last_name }}</td>
+                <td class="p-3">{{ u.email }}</td>
+                <td class="p-3">{{ u.user_type }}</td>
+                <td class="p-3">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold {% if u.is_verified %}bg-emerald-100 text-emerald-800{% else %}bg-rose-100 text-rose-800{% endif %}">
+                        {% if u.is_verified %}Active{% else %}Suspended{% endif %}
+                    </span>
+                </td>
+                <td class="p-3">
+                    {% if u.user_type != 'ADMIN' %}
+                        <a href="/admin/toggle-user/{{ u.id }}" class="bg-slate-800 text-white px-2 py-1 rounded text-[10px]">Toggle Status</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Approve & Manage Job Posts -->
+<h2 class="text-lg font-bold text-slate-800 mb-3">Manage Job Posts</h2>
+<div class="bg-white rounded-xl border shadow-sm overflow-hidden">
+    <table class="w-full text-left text-xs">
+        <thead class="bg-slate-100 font-bold">
+            <tr>
+                <th class="p-3">Job Title</th>
+                <th class="p-3">Company</th>
+                <th class="p-3">Category</th>
+                <th class="p-3">Action</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y">
+            {% for job in jobs %}
+            <tr>
+                <td class="p-3 font-bold">{{ job.job_title }}</td>
+                <td class="p-3">{{ job.company_name }}</td>
+                <td class="p-3">{{ job.category }}</td>
+                <td class="p-3">
+                    <a href="/admin/delete-job/{{ job.id }}" class="bg-rose-600 text-white px-2 py-1 rounded text-[10px]">Delete Post</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

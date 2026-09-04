@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl border shadow-md">
+    <h2 class="text-2xl font-bold mb-2 text-slate-900">Post a Job</h2>
+    <p class="text-xs text-slate-500 mb-6">Create job entity and company details.</p>
+
+    <form method="POST" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+            <div>
+                <label class="block text-xs font-bold mb-1">Company Name</label>
+                <input type="text" name="company_name" required placeholder="Tech Corp Ltd." class="w-full p-2 border rounded text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-bold mb-1">Job Category</label>
+                <input type="text" name="category" required placeholder="Technology / HR" class="w-full p-2 border rounded text-sm">
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold mb-1">Job Designation/Title</label>
+            <input type="text" name="job_title" required placeholder="Python Backend Developer" class="w-full p-2 border rounded text-sm">
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+            <div>
+                <label class="block text-xs font-bold mb-1">Location</label>
+                <input type="text" name="location" required placeholder="Dhaka, BD" class="w-full p-2 border rounded text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-bold mb-1">Job Type</label>
+                <select name="job_type" class="w-full p-2 border rounded text-sm bg-white">
+                    <option value="Full-Time">Full-Time</option>
+                    <option value="Part-Time">Part-Time</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold mb-1">Pay Range</label>
+                <input type="text" name="pay" required placeholder="$60,000 - $80,000" class="w-full p-2 border rounded text-sm">
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold mb-1">Job Description</label>
+            <textarea name="job_description" required placeholder="Detailed responsibilities..." class="w-full p-2 border rounded text-sm h-28"></textarea>
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold mb-1">Benefits</label>
+            <input type="text" name="benefits" placeholder="Health insurance, Performance bonus" class="w-full p-2 border rounded text-sm">
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded transition text-sm">Publish Job Entity</button>
+    </form>
+</div>
+{% endblock %}

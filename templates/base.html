@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Recruitment Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen">
+
+    <nav class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="/" class="flex items-center gap-2 font-black text-2xl text-indigo-400">
+                    <i class="fa-solid fa-layer-group"></i> SmartJob Portal
+                </a>
+                <div class="flex items-center gap-5">
+                    {% if current_user.is_authenticated %}
+                        <span class="text-xs bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-full font-semibold">
+                            <i class="fa-solid fa-circle-user text-emerald-400 mr-1"></i>
+                            {{ current_user.first_name }} ({{ current_user.user_type }})
+                        </span>
+                        
+                        {% if current_user.user_type == 'ADMIN' %}
+                            <a href="/admin" class="text-indigo-200 hover:text-white font-medium text-sm">Admin Layer</a>
+                        {% else %}
+                            <a href="/dashboard" class="text-indigo-200 hover:text-white font-medium text-sm">Dashboard</a>
+                        {% endif %}
+
+                        <a href="/logout" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold transition">Logout</a>
+                    {% else %}
+                        <a href="/login" class="text-indigo-200 hover:text-white font-medium text-sm">Login</a>
+                        <a href="/register" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="bg-indigo-900 text-indigo-100 border border-indigo-700 px-4 py-3 rounded-lg mb-6 flex items-center justify-between shadow-md">
+                        <span><i class="fa-solid fa-bell mr-2 text-indigo-400"></i>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs">
+        <p>&copy; 2026 Smart Job Portal & Recruitment System. Architecture Flowchart Compliant.</p>
+    </footer>
+
+</body>
+</html>

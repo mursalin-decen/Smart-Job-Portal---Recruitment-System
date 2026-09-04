@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl border shadow-md">
+    <h2 class="text-2xl font-bold mb-2 text-slate-900">Build Your Seeker Profile</h2>
+    <p class="text-xs text-slate-500 mb-6">Complete your skills, education, and project entities as defined in the system flowchart.</p>
+
+    <form method="POST" class="space-y-4">
+        <div>
+            <label class="block text-xs font-bold mb-1">Key Skills (Comma separated)</label>
+            <input type="text" name="key_skills" value="{{ profile.key_skills if profile else '' }}" required placeholder="Python, Flask, SQL, HTML" class="w-full p-2 border rounded text-sm">
+        </div>
+        <div>
+            <label class="block text-xs font-bold mb-1">Languages</label>
+            <input type="text" name="languages" value="{{ profile.languages if profile else '' }}" placeholder="English, Bengali" class="w-full p-2 border rounded text-sm">
+        </div>
+
+        <hr class="my-4">
+        <h3 class="font-bold text-sm text-indigo-700">Employment Entity</h3>
+        <div class="grid grid-cols-2 gap-3">
+            <input type="text" name="experience_years" value="{{ profile.experience_years if profile else '' }}" placeholder="Experience (e.g. 2 Years)" class="p-2 border rounded text-sm">
+            <input type="text" name="current_company" value="{{ profile.current_company if profile else '' }}" placeholder="Current Company / Organization" class="p-2 border rounded text-sm">
+        </div>
+
+        <hr class="my-4">
+        <h3 class="font-bold text-sm text-indigo-700">Education Entity</h3>
+        <div class="grid grid-cols-2 gap-3">
+            <input type="text" name="course_degree" value="{{ profile.course_degree if profile else '' }}" placeholder="Course / Degree" class="p-2 border rounded text-sm">
+            <input type="text" name="institute" value="{{ profile.institute if profile else '' }}" placeholder="Institute / University" class="p-2 border rounded text-sm">
+        </div>
+
+        <hr class="my-4">
+        <h3 class="font-bold text-sm text-indigo-700">Project Entity</h3>
+        <input type="text" name="project_title" value="{{ profile.project_title if profile else '' }}" placeholder="Project Title" class="w-full p-2 border rounded text-sm mb-2">
+        <textarea name="project_detail" placeholder="Project Details" class="w-full p-2 border rounded text-sm h-20">{{ profile.project_detail if profile else '' }}</textarea>
+
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded transition text-sm">Save Profile</button>
+    </form>
+</div>
+{% endblock %}

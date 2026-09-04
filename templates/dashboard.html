@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-slate-900">User Dashboard</h1>
+    {% if current_user.user_type == 'JOB_SEEKER' %}
+        <a href="/profile/build" class="bg-indigo-600 text-white text-xs px-4 py-2 rounded-lg font-bold"><i class="fa-solid fa-pen mr-1"></i> Edit Profile Entity</a>
+    {% elif current_user.user_type == 'JOB_PROVIDER' %}
+        <a href="/post-job" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-lg font-bold"><i class="fa-solid fa-plus mr-1"></i> Post New Job</a>
+    {% endif %}
+</div>
+
+{% if current_user.user_type == 'JOB_PROVIDER' %}
+    <!-- Review Applications (Provider Flow) -->
+    <h2 class="text-lg font-bold text-slate-800 mb-3">Applications Received for Review</h2>
+
+    <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
+        <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 text-slate-700 uppercase font-bold border-b">
+                <tr>
+                    <th class="p-3">Candidate</th>
+                    <th class="p-3">Job Applied</th>
+                    <th class="p-3">Question & Answer</th>
+                    <th class="p-3">Resume</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3">Action & Interview Schedule</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y">
+                {% for app in applications %}
+                <tr>
+                    <td class="p-3 font-bold">{{ app.seeker.first_name }} {{ app.seeker.last_name }}</td>
+                    <td class="p-3">{{ app.job.job_title }}</td>
+                    <td class="p-3 text-slate-500 italic">"{{ app.screening_answer }}"</td>
+                    <td class="p-3">
+                        <a href="/uploads/{{ app.resume_file }}" target="_blank" class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded border border-indigo-200 font-semibold">
+                            <i class="fa-solid fa-file-pdf mr-1"></i> View Resume
+                        </a>
+                    </td>
+                    <td class="p-3">
+                        <span class="font-bold px-2 py-0.5 rounded text-[10px]
+                            {% if app.status == 'HIRED' %}bg-emerald-100 text-emerald-800
+                            {% elif app.status == 'REJECTED' %}bg-rose-100 text-rose-800
+                            {% elif app.status == 'REVIEWED' %}bg-amber-100 text-amber-800
+                            {% else %}bg-slate-100 text-slate-700{% endif %}">
+                            {{ app.status }}
+                        </span>
+                        {% if app.interview_date %}
+                            <p class="text-[10px] text-indigo-600 mt-1 font-semibold">Interview: {{ app.interview_date }}</p>
+                        {% endif %}
+                    </td>
+                    <td class="p-3">
+                        <form action="/update-status/{{ app.id }}" method="POST" class="flex flex-col gap-1">
+                            <div class="flex gap-1">
+                                <select name="status" class="p-1 text-[11px] border rounded bg-white">
+                                    <option value="REVIEWED">REVIEWED</option>
+                                    <option value="HIRED">HIRED</option>
+                                    <option value="REJECTED">REJECTED</option>
+                                </select>
+                                <button type="submit" class="bg-indigo-600 text-white px-2 py-1 rounded text-[10px] font-bold">Update</button>
+                            </div>
+                            <input type="text" name="interview_date" placeholder="Interview Date (e.g. Sep 10, 3 PM)" class="p-1 border rounded text-[10px]">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% elif current_user.user_type == 'JOB_SEEKER' %}
+    <!-- Seeker Application Tracking -->
+    <h2 class="text-lg font-bold text-slate-800 mb-3">Application History & Status Track</h2>
+
+    <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
+        <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 text-slate-700 uppercase font-bold border-b">
+                <tr>
+                    <th class="p-3">Job Title</th>
+                    <th class="p-3">Company</th>
+                    <th class="p-3">Applied On</th>
+                    <th class="p-3">Current Status</th>
+                    <th class="p-3">Interview Updates</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y">
+                {% for app in applications %}
+                <tr>
+                    <td class="p-3 font-bold">{{ app.job.job_title }}</td>
+                    <td class="p-3">{{ app.job.company_name }}</td>
+                    <td class="p-3">{{ app.applied_at.strftime('%Y-%m-%d') }}</td>
+                    <td class="p-3">
+                        <span class="font-bold px-2.5 py-1 rounded text-[10px] 
+                            {% if app.status == 'HIRED' %}bg-emerald-100 text-emerald-800
+                            {% elif app.status == 'REJECTED' %}bg-rose-100 text-rose-800
+                            {% else %}bg-blue-100 text-blue-800{% endif %}">
+                            {{ app.status }}
+                        </span>
+                    </td>
+                    <td class="p-3 text-indigo-700 font-semibold">
+                        {% if app.interview_date %}
+                            <i class="fa-regular fa-calendar-check mr-1"></i> {{ app.interview_date }}
+                        {% else %}
+                            Pending Review
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{% endblock %}
