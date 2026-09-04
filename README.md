@@ -57,6 +57,8 @@ smart_job_portal/
 │   ├── post_job.html        # Circular Posting Form
 │   └── admin.html           # System Management Interface
 └── uploads/                 # Storage for Candidate Resumes & Docs
+
+
 🚀 Getting Started
 Prerequisites
 Ensure Python 3.x is installed on your system:
